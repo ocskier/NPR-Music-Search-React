@@ -8,6 +8,10 @@
     box-shadow: 2px 4px 10px 2px #2b2828;
 } */
 
+.sidelink {
+    margin: 1rem auto;
+}
+
 body {
     background-color: azure
 }

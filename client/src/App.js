@@ -28,6 +28,7 @@ class App extends Component {
           : null;
       })
       .catch((err) => console.log(err));
+    M.AutoInit();
   }
 
   render() {
@@ -56,10 +57,14 @@ class App extends Component {
                 }}
               />
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <Link to="/">Saved</Link>
+                <Link to="/" className="sidelink">
+                  Saved
+                </Link>
                 {/* <SideNavItem divider />
-				<SideNavItem subheader>Subheader</SideNavItem> */}
-                <Link to="/scrape">New Scrape</Link>
+				          <SideNavItem subheader>Subheader</SideNavItem> */}
+                <Link to="/scrape" className="sidelink">
+                  New Scrape
+                </Link>
               </div>
             </SideNav>
             <h1 className="display-4">Mongo Scraper</h1>
