@@ -3,10 +3,6 @@
   "version": "1.0.1",
   "description": "",
   "main": "server/server.js",
-  "engines": {
-    "node": "12.0.0",
-    "yarn": "1.17.3"
-  },
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:prod": "node server/server.js",
@@ -20,24 +16,21 @@
   "author": "Jon Jackson",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^3.5.0",
-    "nodemon": "^1.11.0"
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "cheerio": "^1.0.0-rc.2",
-    "connect-mongo": "^2.0.1",
-    "dotenv": "^6.1.0",
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5",
+    "connect-mongo": "^3.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.16.4",
-    "express-session": "^1.15.6",
+    "express-session": "^1.17.1",
     "if-env": "^1.0.4",
-    "moment": "^2.22.2",
-    "mongoose": "^5.3.4",
-    "morgan": "^1.9.1",
-    "react-bootstrap": "^0.32.4",
-    "react-materialize": "^2.4.7",
-    "react-moment": "^0.8.2",
-    "request": "^2.88.0"
+    "materialize-css": "^1.0.0-rc.2",
+    "mongoose": "^5.11.17",
+    "morgan": "^1.10.0",
+    "request": "^2.88.2"
   },
   "repository": {
     "type": "git",
