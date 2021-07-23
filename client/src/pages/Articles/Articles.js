@@ -8,8 +8,6 @@ import { Modal, Row as MatRow } from "react-materialize";
 import moment from "moment";
 import "./Articles.css";
 
-declare var $: any;
-
 class Articles extends Component {
   state = {
     articles: [],
@@ -17,27 +15,23 @@ class Articles extends Component {
     articleTitle: "",
     noteTitle: "",
     noteBody: "",
+    modalOpen: false,
   };
 
   componentDidMount() {
     console.log("Here!");
     this.loadArticles();
-    $("#modal1").modal(
-      {
-        onCloseStart: () => console.log("got here"),
-      },
-      () => this.loadArticles()
-    );
   }
 
   cancel = () => {
-    this.setState(
-      {
+    this.setState((prevState) => {
+      return {
+        ...prevState,
         noteTitle: "",
         noteBody: "",
-      },
-      $("#modal1").modal("close")
-    );
+        modalOpen: false,
+      };
+    });
   };
 
   save = () => {
@@ -63,7 +57,9 @@ class Articles extends Component {
   loadArticles = () => {
     API.getArticles()
       .then((res) => {
-        this.setState({ articles: res.data });
+        this.setState((prevState) => {
+          return { ...prevState, articles: res.data };
+        });
         console.log(res);
       })
       .catch((err) => console.log(err));
@@ -77,42 +73,60 @@ class Articles extends Component {
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({
-      [name]: value,
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        [name]: value,
+      };
     });
   };
 
   getNoteDiv = (e, artId) => {
     e.preventDefault();
-    this.setState({ articleId: artId }, () => {
-      console.log(this.state);
-      API.getArticle(artId)
-        .then((res) =>
-          this.setState(
-            {
-              articleTitle: res.data.title,
-            },
-            () => {
-              console.log(res.data);
-              !(res.data.notes.length === 0)
-                ? API.getNote(res.data.notes[res.data.notes.length - 1]._id)
-                    .then((res) => {
-                      console.log(res);
-                      this.setState(
-                        {
-                          noteTitle: res.data.title,
-                          noteBody: res.data.body,
-                        },
-                        () => $("#modal1").modal("open")
-                      );
-                    })
-                    .catch((err) => console.log(err))
-                : $("#modal1").modal("open");
-            }
+    this.setState(
+      (prevState) => {
+        return { ...prevState, articleId: artId };
+      },
+      () => {
+        console.log(this.state);
+        API.getArticle(artId)
+          .then((res) =>
+            this.setState(
+              (prevState) => {
+                return { ...prevState, articleTitle: res.data.title };
+              },
+              () => {
+                console.log(res.data);
+                res.data.notes && res.data.notes.length > 0
+                  ? API.getNote(res.data.notes[res.data.notes.length - 1]._id)
+                      .then((res) => {
+                        console.log(res.data);
+                        this.setState(
+                          (prevState) => {
+                            return {
+                              ...prevState,
+                              noteTitle: res.data[0].title,
+                              noteBody: res.data[0].body,
+                            };
+                          },
+                          () => {
+                            this.setState((prevState) => {
+                              return {
+                                ...prevState,
+                                modalOpen: true,
+                              };
+                            });
+                          }
+                        );
+                      })
+                      .catch((err) => console.log(err))
+                  : null;
+              }
+            )
           )
-        )
-        .catch((err) => console.log(err));
-    });
+          .catch((err) => console.log(err));
+      }
+    );
   };
 
   render() {
@@ -182,6 +196,7 @@ class Articles extends Component {
           id="modal1"
           header={this.state.articleTitle}
           fixedFooter
+          open={this.state.modalOpen}
           style={{ maxHeight: "80%" }}
           actions={
             <div
@@ -213,6 +228,7 @@ class Articles extends Component {
             value={this.state.noteTitle}
             name="noteTitle"
             placeholder="Subject"
+            type="text"
           ></input>
           {/* A textarea to add a new note body */}
           <textarea
@@ -220,6 +236,7 @@ class Articles extends Component {
             value={this.state.noteBody}
             name="noteBody"
             placeholder="Add a Note"
+            type="text"
           ></textarea>
         </Modal>
       </MatRow>

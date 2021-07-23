@@ -7,9 +7,10 @@ import NoMatch from "./pages/NoMatch";
 import { SideNav, SideNavItem } from "react-materialize";
 import { Link } from "react-router-dom";
 
+import API from "./utils/API";
+
 import M from "materialize-css";
 import "./App.css";
-import API from "./utils/API";
 
 class App extends Component {
   state = {
