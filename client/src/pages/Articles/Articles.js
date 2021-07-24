@@ -88,7 +88,6 @@ class Articles extends Component {
         return { ...prevState, articleId: artId };
       },
       () => {
-        console.log(this.state);
         API.getArticle(artId)
           .then((res) =>
             this.setState(
@@ -96,11 +95,9 @@ class Articles extends Component {
                 return { ...prevState, articleTitle: res.data.title };
               },
               () => {
-                console.log(res.data);
                 res.data.notes && res.data.notes.length > 0
                   ? API.getNote(res.data.notes[res.data.notes.length - 1]._id)
                       .then((res) => {
-                        console.log(res.data);
                         this.setState(
                           (prevState) => {
                             return {
@@ -120,7 +117,12 @@ class Articles extends Component {
                         );
                       })
                       .catch((err) => console.log(err))
-                  : null;
+                  : this.setState((prevState) => {
+                      return {
+                        ...prevState,
+                        modalOpen: true,
+                      };
+                    });
               }
             )
           )
